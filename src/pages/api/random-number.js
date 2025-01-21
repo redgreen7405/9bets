@@ -3,7 +3,6 @@ import { ref, push, set, get } from "firebase/database";
 
 export const runtime = "edge";
 
-let intervalId;
 
 const formatPeriod = (date, index) => {
   const year = date.getFullYear();
@@ -15,10 +14,6 @@ const formatPeriod = (date, index) => {
 
 export default async function handler(req) {
   if (req.method === "GET") {
-    // Clear the interval if it's already running to prevent duplicates
-    if (intervalId) clearInterval(intervalId);
-
-    intervalId = setInterval(async () => {
       const randomNumber = Math.floor(Math.random() * 10); // Random number between 0 and 9
 
       // Determine the colors based on the random number
@@ -96,8 +91,7 @@ export default async function handler(req) {
         })
         .catch((error) => {
           console.error("Error adding data:", error);
-        });
-    }, 60000); // 1-minute interval (though this can be adjusted as needed)
+        })
 
     return new Response({
       status: 200,

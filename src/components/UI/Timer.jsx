@@ -128,15 +128,15 @@ const Timer = ({
   };
 
   useEffect(() => {
-    const callRandomNumberApi = async () => {
-      try {
-        const response = await axios.get("/api/random-number");
-      } catch (error) {
-        console.error("Error calling the random number API:", error);
-      }
-    };
+    // const callRandomNumberApi = async () => {
+    //   try {
+    //     const response = await axios.get("/api/random-number");
+    //   } catch (error) {
+    //     console.error("Error calling the random number API:", error);
+    //   }
+    // };
 
-    callRandomNumberApi(); // Call the API when the app starts
+    // callRandomNumberApi(); // Call the API when the app starts
     fetchTimers();
   }, []);
 
