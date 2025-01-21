@@ -5,10 +5,8 @@ import {
   query,
   where,
   getDocs,
-  doc,
   updateDoc,
   addDoc,
-  runTransaction,
   serverTimestamp,
 } from "firebase/firestore";
 import { ref, get, set, increment } from "firebase/database";
@@ -17,12 +15,13 @@ import { database, firestore } from "../../utils/firebase";
 const Drawer = ({
   isOpen,
   onClose,
-  color = "emerald",
+  color,
   selected,
   setMoney,
   setBidAmount,
   // gameId,
 }) => {
+  const localColor = color;
   const [gameState, setGameState] = useState({
     balance: [1, 10, 100, 1000],
     selectedBalance: 1,
@@ -32,8 +31,7 @@ const Drawer = ({
     isClosing: false,
   });
 
-  const { selectedBalance, quantity, multiplier, isAgreed, isClosing } =
-    gameState;
+  const { selectedBalance, quantity, multiplier, isAgreed, isClosing } = gameState;
   const totalAmount = selectedBalance * quantity * multiplier;
   const multipliers = [1, 5, 10, 20, 50, 100];
   const canSubmit = isAgreed && totalAmount > 0;
@@ -171,11 +169,11 @@ const Drawer = ({
       key={value}
       className={`py-2 rounded-lg text-sm font-semibold tracking-wider transition-all duration-200 
         ${currentValue === value
-          ? `bg-white text-${color}-600 ring-2 ring-${color}-500`
+          ? `bg-white text-emerald-600 ring-2 ring-emerald-500`
           : "bg-white/10 hover:bg-white/20 text-white"
         }`}
       onClick={() => setGameState((prev) => ({ ...prev, [setter]: value }))}
-    >
+    > 
       {prefix}
       {value}
     </button>
@@ -189,7 +187,7 @@ const Drawer = ({
       onClick={(e) => e.target.id === "drawer-overlay" && handleClose()}
     >
       <div
-        className={`absolute bottom-0 w-full max-w-md rounded-t-3xl bg-${color}-600 
+        className={`absolute bottom-0 w-full max-w-md rounded-t-3xl bg-${localColor}-${localColor === "sky" ? "500" : "600"} 
         text-white shadow-2xl overflow-hidden transform transition-transform duration-300 
         ease-in-out ${isOpen && !isClosing ? "translate-y-0" : "translate-y-full"
           }`}
@@ -299,8 +297,8 @@ const Drawer = ({
             <button
               className={`py-3 rounded-lg transition-all duration-300 tracking-wider font-semibold
                 ${canSubmit
-                  ? `bg-gradient-to-br from-${color}-600 to-${color}-700 
-                     hover:from-${color}-700 hover:to-${color}-800 text-white`
+                  ? `bg-gradient-to-br from-${localColor}-600 to-${localColor}-700 
+                     hover:from-${localColor}-700 hover:to-${localColor}-800 text-white`
                   : "bg-gray-400 text-gray-200 cursor-not-allowed"
                 }`}
               onClick={handleGamePlay}
